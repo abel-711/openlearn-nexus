@@ -14,7 +14,109 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chapters: {
+        Row: {
+          chapter_number: number | null
+          code: string
+          created_at: string
+          id: string
+          kind: string
+          part_id: string
+          sort_order: number
+          storage_path: string
+          title: string
+        }
+        Insert: {
+          chapter_number?: number | null
+          code: string
+          created_at?: string
+          id?: string
+          kind?: string
+          part_id: string
+          sort_order?: number
+          storage_path: string
+          title: string
+        }
+        Update: {
+          chapter_number?: number | null
+          code?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          part_id?: string
+          sort_order?: number
+          storage_path?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chapters_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "subject_parts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subject_parts: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          part_number: number
+          slug: string
+          subject_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          part_number: number
+          slug: string
+          subject_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          part_number?: number
+          slug?: string
+          subject_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subject_parts_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subjects: {
+        Row: {
+          color: string | null
+          created_at: string
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
