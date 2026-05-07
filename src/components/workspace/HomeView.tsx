@@ -16,10 +16,10 @@ export const HomeView = ({ onNavigate }: { onNavigate: (v: ViewKey) => void }) =
           <span className="h-1.5 w-1.5 rounded-full bg-accent-emerald shadow-[0_0_10px_hsl(var(--accent-emerald))]" />
           Vault online · 1,284 documents
         </div>
-        <h1 className="font-display text-4xl font-semibold leading-tight md:text-5xl">
-          Good evening, <span className="text-gradient-aurora">Aiden</span>.<br />
-          Your mind is <span className="text-gradient-aurora">primed</span> for deep work.
-        </h1>
+         <h1 className="font-display text-4xl font-semibold leading-tight md:text-5xl">
+           Good evening, <span className="text-gradient-aurora">Abel Paul N</span>.<br />
+           Your mind is <span className="text-gradient-aurora">primed</span> for deep work.
+         </h1>
         <p className="mt-3 max-w-xl text-sm text-muted-foreground">
           You have <span className="text-foreground">3 high-leverage</span> sessions queued and a fresh AI brief on
           <span className="text-foreground"> Linear Algebra</span>. Where shall we begin?
