@@ -1,33 +1,47 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Home, Search, Sparkles, CalendarDays, Network, Focus, BarChart3, ChevronsLeft, ChevronsRight, Pin, FileText, Plus, Library } from "lucide-react";
 import { ViewKey, VIEWS } from "@/lib/workspace";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 const ICONS: Record<ViewKey, React.ComponentType<{ className?: string }>> = {
   home: Home, search: Search, mentor: Sparkles, library: Library, planner: CalendarDays, graph: Network, focus: Focus, analytics: BarChart3,
 };
-
-const subjects = [
-  { name: "Quantum Physics", color: "accent-violet" },
-  { name: "Linear Algebra", color: "accent-blue" },
-  { name: "Neural Networks", color: "accent-cyan" },
-  { name: "Macro Economics", color: "accent-emerald" },
-];
-
-const recents = [
-  "Eigenvectors — Chapter 4",
-  "Backprop derivation",
-  "Wavefunction collapse notes",
-];
 
 interface Props {
   view: ViewKey;
   onChange: (v: ViewKey) => void;
   collapsed: boolean;
   onToggle: () => void;
+  onOpenLibrary?: (subjectSlug?: string) => void;
 }
 
-export const Sidebar = ({ view, onChange, collapsed, onToggle }: Props) => {
+export const Sidebar = ({ view, onChange, collapsed, onToggle, onOpenLibrary }: Props) => {
+  const [subjects, setSubjects] = useState<{ slug: string; name: string; color: string | null }[]>([]);
+  const [recents, setRecents] = useState<{ id: string; title: string; storage_path: string }[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const { data: subs } = await supabase
+        .from("subjects")
+        .select("slug, name, color")
+        .order("name");
+      setSubjects(subs ?? []);
+      const { data: recs } = await supabase
+        .from("chapters")
+        .select("id, title, storage_path")
+        .eq("kind", "chapter")
+        .order("created_at", { ascending: false })
+        .limit(4);
+      setRecents(recs ?? []);
+    })();
+  }, []);
+
+  const openPdf = (path: string) => {
+    const url = supabase.storage.from("materials").getPublicUrl(path).data.publicUrl;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
   return (
     <motion.aside
       animate={{ width: collapsed ? 76 : 264 }}
@@ -86,17 +100,29 @@ export const Sidebar = ({ view, onChange, collapsed, onToggle }: Props) => {
       {!collapsed && (
         <div className="mt-6 flex-1 overflow-y-auto px-4">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Pinned</span>
-            <button className="grid h-5 w-5 place-items-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Subjects</span>
+            <button
+              onClick={() => onOpenLibrary?.()}
+              className="grid h-5 w-5 place-items-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
+              title="Open library"
+            >
               <Plus className="h-3 w-3" />
             </button>
           </div>
           <ul className="space-y-1">
             {subjects.map((s) => (
-              <li key={s.name} className="group flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs text-muted-foreground hover:bg-secondary/60 hover:text-foreground">
-                <span className={`h-2 w-2 rounded-full bg-${s.color}`} style={{ backgroundColor: `hsl(var(--${s.color}))` }} />
-                <span className="flex-1 truncate">{s.name}</span>
-                <Pin className="h-3 w-3 opacity-0 group-hover:opacity-60" />
+              <li key={s.slug}>
+                <button
+                  onClick={() => onOpenLibrary?.(s.slug)}
+                  className="group flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
+                >
+                  <span
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: `hsl(var(--${s.color || "primary"}))` }}
+                  />
+                  <span className="flex-1 truncate">{s.name}</span>
+                  <Pin className="h-3 w-3 opacity-0 group-hover:opacity-60" />
+                </button>
               </li>
             ))}
           </ul>
@@ -104,9 +130,14 @@ export const Sidebar = ({ view, onChange, collapsed, onToggle }: Props) => {
           <div className="mt-6 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Recent</div>
           <ul className="space-y-1">
             {recents.map((r) => (
-              <li key={r} className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs text-muted-foreground hover:bg-secondary/60 hover:text-foreground">
-                <FileText className="h-3 w-3 shrink-0" />
-                <span className="truncate">{r}</span>
+              <li key={r.id}>
+                <button
+                  onClick={() => openPdf(r.storage_path)}
+                  className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
+                >
+                  <FileText className="h-3 w-3 shrink-0" />
+                  <span className="truncate">{r.title}</span>
+                </button>
               </li>
             ))}
           </ul>
