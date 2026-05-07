@@ -12,12 +12,14 @@ import { PlannerView } from "../workspace/PlannerView";
 import { GraphView } from "../workspace/GraphView";
 import { FocusView } from "../workspace/FocusView";
 import { AnalyticsView } from "../workspace/AnalyticsView";
+import { LibraryView } from "../workspace/LibraryView";
 
 export const AppShell = () => {
   const [view, setView] = useState<ViewKey>("home");
   const [collapsed, setCollapsed] = useState(false);
   const [askedQuery, setAskedQuery] = useState<string | undefined>();
   const [mentorSeed, setMentorSeed] = useState<string | undefined>();
+  const [librarySubject, setLibrarySubject] = useState<string | undefined>();
 
   const handleAsk = (q: string) => {
     const lower = q.toLowerCase();
@@ -26,14 +28,20 @@ export const AppShell = () => {
       setView("mentor");
     } else if (lower.includes("plan")) setView("planner");
     else if (lower.includes("graph")) setView("graph");
+    else if (lower.includes("library") || lower.includes("material") || lower.includes("chapter") || lower.includes("pdf")) setView("library");
     else { setAskedQuery(q); setView("search"); }
+  };
+
+  const openLibrary = (subjectSlug?: string) => {
+    setLibrarySubject(subjectSlug);
+    setView("library");
   };
 
   return (
     <div className="relative min-h-screen text-foreground">
       <AuroraBackground />
       <div className="flex min-h-screen">
-        <Sidebar view={view} onChange={setView} collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
+        <Sidebar view={view} onChange={setView} collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} onOpenLibrary={openLibrary} />
         <div className="flex min-w-0 flex-1 flex-col">
           <CommandBar onAsk={handleAsk} />
           <div className="flex min-h-0 flex-1">
@@ -49,6 +57,7 @@ export const AppShell = () => {
                   {view === "home" && <HomeView onNavigate={setView} />}
                   {view === "search" && <SearchView initialQuery={askedQuery} />}
                   {view === "mentor" && <MentorView initial={mentorSeed} />}
+                  {view === "library" && <LibraryView initialSubject={librarySubject} />}
                   {view === "planner" && <PlannerView />}
                   {view === "graph" && <GraphView />}
                   {view === "focus" && <FocusView />}
