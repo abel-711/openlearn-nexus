@@ -148,11 +148,11 @@ export const Sidebar = ({ view, onChange, collapsed, onToggle, onOpenLibrary }: 
       <div className="mt-auto border-t border-border/40 p-3">
         {!collapsed ? (
           <div className="glass flex items-center gap-3 rounded-xl p-2.5">
-            <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-cyan text-xs font-semibold text-primary-foreground">AY</div>
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-xs font-semibold">Aiden Yu</div>
-              <div className="truncate text-[10px] text-muted-foreground">Level 12 · 1,840 XP</div>
-            </div>
+           <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-cyan text-xs font-semibold text-primary-foreground">AP</div>
+             <div className="min-w-0 flex-1">
+               <div className="truncate text-xs font-semibold">Abel Paul N</div>
+               <div className="truncate text-[10px] text-muted-foreground">Level 12 · 1,840 XP</div>
+             </div>
             <button onClick={onToggle} className="rounded-md p-1 text-muted-foreground hover:bg-secondary hover:text-foreground">
               <ChevronsLeft className="h-4 w-4" />
             </button>
