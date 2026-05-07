@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import { Home, Search, Sparkles, CalendarDays, Network, Focus, BarChart3, ChevronsLeft, ChevronsRight, Pin, FileText, Plus } from "lucide-react";
+import { Home, Search, Sparkles, CalendarDays, Network, Focus, BarChart3, ChevronsLeft, ChevronsRight, Pin, FileText, Plus, Library } from "lucide-react";
 import { ViewKey, VIEWS } from "@/lib/workspace";
 import { cn } from "@/lib/utils";
 
 const ICONS: Record<ViewKey, React.ComponentType<{ className?: string }>> = {
-  home: Home, search: Search, mentor: Sparkles, planner: CalendarDays, graph: Network, focus: Focus, analytics: BarChart3,
+  home: Home, search: Search, mentor: Sparkles, library: Library, planner: CalendarDays, graph: Network, focus: Focus, analytics: BarChart3,
 };
 
 const subjects = [
