@@ -68,7 +68,7 @@ export const HomeView = ({ onNavigate }: { onNavigate: (v: ViewKey) => void }) =
       </div>
       <div className="grid gap-3 md:grid-cols-2">
         {[
-          { t: "Eigenvectors & diagonalization", s: "Linear Algebra · 62% read", c: "accent-blue" },
+           { t: "linear Algebra\n", s: "Linear Algebra · 62% read", c: "accent-blue" },
           { t: "Backpropagation derivation", s: "Neural Networks · 31% read", c: "accent-cyan" },
           { t: "Wavefunction collapse", s: "Quantum Physics · 84% read", c: "accent-violet" },
           { t: "Inflation dynamics", s: "Macro Economics · 12% read", c: "accent-emerald" },
