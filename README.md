@@ -2,6 +2,8 @@
 
 An AI-native, glassmorphic study workspace designed for deep, focused learning. OPENLearn Vault combines semantic AI search, an intelligent mentor, adaptive planning, interactive knowledge graphs, and analytics — all inside a fluid, animated interface.
 
+Link : https://openlearnvault2026.lovable.app
+
 ---
 
 ## Features
